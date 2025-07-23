@@ -22,9 +22,9 @@ export class HealthchecksIOApi implements ICredentialType {
 	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
-			headers: {
-				'X-Custom-Header': 'n8n-ndoes-healthchecksio'
-			},
+                        headers: {
+                                'X-Custom-Header': 'n8n-nodes-healthchecksio'
+                        },
 		},
 	};
 
