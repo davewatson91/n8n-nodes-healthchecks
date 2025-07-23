@@ -38,6 +38,10 @@ your job.
 You can specify:
 
 - `UUID/Slug`
+- HTTP Method (HEAD, GET or POST)
+- Optional request body when using POST
+- Optional Ping-Body-Limit header to limit stored log size
+- Script exit status to report with the ping
 
 ## Credentials
 

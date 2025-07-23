@@ -19,45 +19,73 @@ export const httpVerbOperations: INodeProperties[] = [
 				value: 'ping',
 				action: 'Ping',
 				routing: {
-					request: {
-						method: 'GET',
-						url: '=/ping/{{$parameter.uuid}}',
-					},
-				},
-			},
+                                        request: {
+                                                method: '={{$parameter.method}}',
+                                                url: '=/ping/{{$parameter.uuid}}',
+                                                body: '={{$parameter.body}}',
+                                                headers: {
+                                                        'Ping-Body-Limit': '={{$parameter.additionalFields.pingBodyLimit || undefined}}',
+                                                },
+                                                qs: {
+                                                        exitstatus: '={{$parameter.exitStatus || undefined}}',
+                                                },
+                                        },
+                                },
+                        },
 			{
 				name: 'Start',
 				value: 'start',
 				action: 'Start',
 				routing: {
-					request: {
-						method: 'GET',
-						url: '=/ping/{{$parameter.uuid}}/start',
-					},
-				},
-			},
+                                        request: {
+                                                method: '={{$parameter.method}}',
+                                                url: '=/ping/{{$parameter.uuid}}/start',
+                                                body: '={{$parameter.body}}',
+                                                headers: {
+                                                        'Ping-Body-Limit': '={{$parameter.additionalFields.pingBodyLimit || undefined}}',
+                                                },
+                                                qs: {
+                                                        exitstatus: '={{$parameter.exitStatus || undefined}}',
+                                                },
+                                        },
+                                },
+                        },
 			{
 				name: 'Fail',
 				value: 'fail',
 				action: 'Fail',
 				routing: {
-					request: {
-						method: 'GET',
-						url: '=/ping/{{$parameter.uuid}}/fail',
-					},
-				},
-			},
+                                        request: {
+                                                method: '={{$parameter.method}}',
+                                                url: '=/ping/{{$parameter.uuid}}/fail',
+                                                body: '={{$parameter.body}}',
+                                                headers: {
+                                                        'Ping-Body-Limit': '={{$parameter.additionalFields.pingBodyLimit || undefined}}',
+                                                },
+                                                qs: {
+                                                        exitstatus: '={{$parameter.exitStatus || undefined}}',
+                                                },
+                                        },
+                                },
+                        },
 			{
 				name: 'Log',
 				value: 'log',
 				action: 'Log',
 				routing: {
-					request: {
-						method: 'GET',
-						url: '=/ping/{{$parameter.uuid}}/log',
-					},
-				},
-			},
+                                        request: {
+                                                method: '={{$parameter.method}}',
+                                                url: '=/ping/{{$parameter.uuid}}/log',
+                                                body: '={{$parameter.body}}',
+                                                headers: {
+                                                        'Ping-Body-Limit': '={{$parameter.additionalFields.pingBodyLimit || undefined}}',
+                                                },
+                                                qs: {
+                                                        exitstatus: '={{$parameter.exitStatus || undefined}}',
+                                                },
+                                        },
+                                },
+                        },
 		],
 		default: 'ping',
 	},
@@ -112,10 +140,10 @@ const failOperation: INodeProperties[] = [
 	},
 ];
 const logOperation: INodeProperties[] = [
-	{
-		displayName: 'UUID',
-		name: 'uuid',
-		default: 'uuid.v4()',
+        {
+                displayName: 'UUID',
+                name: 'uuid',
+                default: 'uuid.v4()',
 		description: '/ping/&lt;UUID&gt;/log',
 		displayOptions: {
 			show: {
@@ -125,7 +153,66 @@ const logOperation: INodeProperties[] = [
 		},
 		type: 'string',
 		required: true,
-	},
+        },
+];
+
+const methodField: INodeProperties[] = [
+       {
+               displayName: 'HTTP Method',
+               name: 'method',
+               type: 'options',
+               options: [
+                       { name: 'GET', value: 'GET' },
+                       { name: 'POST', value: 'POST' },
+                       { name: 'HEAD', value: 'HEAD' },
+               ],
+               default: 'GET',
+               description: 'The HTTP method to use',
+       },
+];
+
+const bodyField: INodeProperties[] = [
+       {
+               displayName: 'Body',
+               name: 'body',
+               type: 'string',
+               default: '',
+               displayOptions: {
+                       show: {
+                               method: ['POST'],
+                       },
+               },
+               description: 'Optional body to send with the request',
+       },
+];
+
+const exitStatusField: INodeProperties[] = [
+       {
+               displayName: 'Exit Status',
+               name: 'exitStatus',
+               type: 'number',
+               default: NaN,
+               description: 'Script exit status to report',
+       },
+];
+
+const additionalFields: INodeProperties[] = [
+       {
+               displayName: 'Additional Fields',
+               name: 'additionalFields',
+               type: 'collection',
+               placeholder: 'Add Field',
+               default: {},
+               options: [
+                       {
+                               displayName: 'Ping Body Limit',
+                               name: 'pingBodyLimit',
+                               type: 'number',
+                               default: NaN,
+                               description: 'Value for the Ping-Body-Limit header',
+                       },
+               ],
+       },
 ];
 
 
@@ -133,8 +220,12 @@ export const httpVerbFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                httpVerb:get                                */
 	/* -------------------------------------------------------------------------- */
-	...pingOperation,
-	...startOperation,
-	...failOperation,
-	...logOperation
+        ...pingOperation,
+        ...startOperation,
+        ...failOperation,
+        ...logOperation,
+        ...methodField,
+        ...bodyField,
+        ...exitStatusField,
+        ...additionalFields,
 ];
