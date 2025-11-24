@@ -4,7 +4,7 @@
 This is an n8n community node. It lets you use [Healthchecks.io](https://healthchecks.io) in your n8n workflows.
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-### Table of content
+### Table of contents
 
 - [Installation](#installation)
 - [Operations](#operations)
@@ -13,8 +13,15 @@ This is an n8n community node. It lets you use [Healthchecks.io](https://healthc
 
 ## Installation
 
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community
-nodes documentation.
+To install a custom node in n8n, follow these steps:
+
+1. Refer to the official documentation: [n8n Custom Node Installation](https://docs.n8n.io/integrations/community-nodes/installation/)
+
+2. Choose the custom node you want to install, `n8n-nodes-healthchecksio`.
+
+3. Follow the instructions provided in the documentation to install and configure the custom node.
+
+For detailed installation steps and configuration options, please visit the official n8n documentation linked above.
 
 ## Operations
 
@@ -36,7 +43,7 @@ You can specify:
 
 ![Credentials image](https://raw.githubusercontent.com/opa-oz/n8n-nodes-healthchecks/master/docs/credentials.png)
 
-You can have different set of credentials for Healthchecks.io.
+You can have different sets of credentials for Healthchecks.io.
 
 ## Resources
 
