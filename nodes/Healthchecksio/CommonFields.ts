@@ -83,27 +83,4 @@ export const commonFields: INodeProperties[] = [
       rows: 4,
     },
   },
-  {
-    displayName: 'Content Type',
-    name: 'contentType',
-    default: 'text/plain',
-    description: 'Content-Type header used when sending a request body',
-    displayOptions: {
-      show: {
-        resource: ['by_uuid', 'by_slug'],
-        operation: ['ping', 'start', 'fail', 'log', 'exitStatus'],
-      },
-    },
-    type: 'options',
-    options: [
-      {
-        name: 'Plain Text',
-        value: 'text/plain',
-      },
-      {
-        name: 'JSON',
-        value: 'application/json',
-      },
-    ],
-  },
 ];

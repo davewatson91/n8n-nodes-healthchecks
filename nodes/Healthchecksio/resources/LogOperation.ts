@@ -13,10 +13,7 @@ export const logOperation: INodePropertyOptions = {
         'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
         'rid': '={{$parameter.runId || undefined}}',
       },
-      headers: {
-        'Content-Type': '={{$parameter.contentType}}',
-      },
-      body: '={{$parameter.requestBody || $parameter.logMessage}}',
+      body: '={{$parameter.requestBody || $parameter.logMessage || undefined}}',
     },
   },
 };

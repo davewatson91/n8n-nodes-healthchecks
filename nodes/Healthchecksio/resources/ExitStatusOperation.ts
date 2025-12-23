@@ -13,10 +13,7 @@ export const exitStatusOperation: INodePropertyOptions = {
         'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
         'rid': '={{$parameter.runId || undefined}}',
       },
-      headers: {
-        'Content-Type': '={{$parameter.requestBody ? $parameter.contentType : undefined}}',
-      },
-      body: '={{$parameter.requestBody}}',
+      body: '={{$parameter.requestBody || undefined}}',
     },
   },
 };
