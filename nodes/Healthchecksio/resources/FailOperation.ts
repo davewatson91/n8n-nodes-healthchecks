@@ -7,12 +7,16 @@ export const failOperation: INodePropertyOptions = {
   description: 'Signals to Healthchecks.io that the job has failed',
   routing: {
     request: {
-      url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/fail',
-      method: 'GET',
+      url: '=/ping/{{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/fail',
+      method: 'POST',
       qs: {
-        'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
-        'rid': '={{$parameter.runId}}',
+        'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
+        'rid': '={{$parameter.runId || undefined}}',
       },
+      headers: {
+        'Content-Type': '={{$parameter.requestBody ? $parameter.contentType : undefined}}',
+      },
+      body: '={{$parameter.requestBody}}',
     },
   },
 };

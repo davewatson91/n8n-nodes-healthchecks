@@ -7,12 +7,16 @@ export const exitStatusOperation: INodePropertyOptions = {
   description: 'Sends a success or failure signal depending on the exit status',
   routing: {
     request: {
-      url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/{{$parameter.exitCode}}',
-      method: 'GET',
+      url: '=/ping/{{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/{{$parameter.exitCode}}',
+      method: 'POST',
       qs: {
-        'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
-        'rid': '={{$parameter.runId}}',
+        'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
+        'rid': '={{$parameter.runId || undefined}}',
       },
+      headers: {
+        'Content-Type': '={{$parameter.requestBody ? $parameter.contentType : undefined}}',
+      },
+      body: '={{$parameter.requestBody}}',
     },
   },
 };

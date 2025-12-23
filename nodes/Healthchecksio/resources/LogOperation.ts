@@ -7,15 +7,16 @@ export const logOperation: INodePropertyOptions = {
   description: 'Sends logging information to Healthchecks.io without signaling success or failure',
   routing: {
     request: {
-      url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/log',
+      url: '=/ping/{{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/log',
       method: 'POST',
       qs: {
-        'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
-        'rid': '={{$parameter.runId}}',
+        'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
+        'rid': '={{$parameter.runId || undefined}}',
       },
-      body: {
-        'msg': '={{$parameter.logMessage}}',
+      headers: {
+        'Content-Type': '={{$parameter.contentType}}',
       },
+      body: '={{$parameter.requestBody || $parameter.logMessage}}',
     },
   },
 };
@@ -32,6 +33,5 @@ export const logFields: INodeProperties[] = [
       },
     },
     type: 'string',
-    required: true,
   },
 ];
