@@ -13,9 +13,10 @@ export const logOperation: INodePropertyOptions = {
         'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
         'rid': '={{$parameter.runId}}',
       },
-      body: {
-        'msg': '={{$parameter.logMessage}}',
+      headers: {
+        'Content-Type': '={{$parameter.contentType}}',
       },
+      body: '={{$parameter.requestBody || $parameter.logMessage}}',
     },
   },
 };
@@ -32,6 +33,5 @@ export const logFields: INodeProperties[] = [
       },
     },
     type: 'string',
-    required: true,
   },
 ];

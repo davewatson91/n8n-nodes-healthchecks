@@ -8,11 +8,15 @@ export const startOperation: INodePropertyOptions = {
   routing: {
     request: {
       url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/start',
-      method: 'GET',
+      method: '={{$parameter.requestBody ? "POST" : "GET"}}',
       qs: {
         'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
         'rid': '={{$parameter.runId}}',
       },
+      headers: {
+        'Content-Type': '={{$parameter.requestBody ? $parameter.contentType : undefined}}',
+      },
+      body: '={{$parameter.requestBody}}',
     },
   },
 };
