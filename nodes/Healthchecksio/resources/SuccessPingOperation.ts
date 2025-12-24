@@ -1,4 +1,4 @@
-import { INodePropertyOptions } from "n8n-workflow";
+import { IHttpRequestOptions, INodePropertyOptions } from "n8n-workflow";
 
 export const successPingOperation: INodePropertyOptions = {
   name: 'Success Ping',
@@ -14,6 +14,16 @@ export const successPingOperation: INodePropertyOptions = {
         'rid': '={{$parameter.runId || undefined}}',
       },
       body: '={{$parameter.requestBody || undefined}}',
+    },
+    send: {
+      preSend: [
+        async function (requestOptions: IHttpRequestOptions) {
+          if (requestOptions.body !== undefined) {
+            requestOptions.json = false;
+          }
+          return requestOptions;
+        },
+      ],
     },
   },
 };

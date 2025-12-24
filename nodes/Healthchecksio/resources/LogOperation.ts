@@ -1,4 +1,4 @@
-import { INodeProperties, INodePropertyOptions } from "n8n-workflow";
+import { IHttpRequestOptions, INodePropertyOptions } from "n8n-workflow";
 
 export const logOperation: INodePropertyOptions = {
   name: 'Log',
@@ -13,22 +13,17 @@ export const logOperation: INodePropertyOptions = {
         'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
         'rid': '={{$parameter.runId || undefined}}',
       },
-      body: '={{$parameter.requestBody || $parameter.logMessage || undefined}}',
+      body: '={{$parameter.requestBody || undefined}}',
+    },
+    send: {
+      preSend: [
+        async function (requestOptions: IHttpRequestOptions) {
+          if (requestOptions.body !== undefined) {
+            requestOptions.json = false;
+          }
+          return requestOptions;
+        },
+      ],
     },
   },
 };
-
-export const logFields: INodeProperties[] = [
-  {
-    displayName: 'Log Message',
-    name: 'logMessage',
-    default: '',
-    displayOptions: {
-      show: {
-        resource: ['by_uuid', 'by_slug'],
-        operation: ['log'],
-      },
-    },
-    type: 'string',
-  },
-];
