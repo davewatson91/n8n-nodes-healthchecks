@@ -1,3 +1,4 @@
+import { IExecuteSingleFunctions } from "n8n-core";
 import { IHttpRequestOptions, INodePropertyOptions } from "n8n-workflow";
 
 export const logOperation: INodePropertyOptions = {
@@ -17,9 +18,22 @@ export const logOperation: INodePropertyOptions = {
     },
     send: {
       preSend: [
-        async function (requestOptions: IHttpRequestOptions) {
+        async function (this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions) {
           if (requestOptions.body !== undefined) {
             requestOptions.json = false;
+          }
+          const itemIndex = (requestOptions as { context?: { itemIndex?: number } }).context?.itemIndex ?? 0;
+          const debugRequest = this.getNodeParameter('debugRequest', itemIndex) as boolean;
+
+          if (debugRequest) {
+            this.logger.info('Healthchecks.io outgoing request', {
+              method: requestOptions.method,
+              baseURL: requestOptions.baseURL,
+              url: requestOptions.url,
+              qs: requestOptions.qs,
+              headers: requestOptions.headers,
+              body: requestOptions.body,
+            });
           }
           return requestOptions;
         },

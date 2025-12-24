@@ -83,4 +83,17 @@ export const commonFields: INodeProperties[] = [
       rows: 4,
     },
   },
+  {
+    displayName: 'Log Request Details',
+    name: 'debugRequest',
+    default: false,
+    description: 'If enabled, logs the outgoing request options (URL, headers, query, and body) to the n8n logs for debugging',
+    displayOptions: {
+      show: {
+        resource: ['by_uuid', 'by_slug'],
+        operation: ['ping', 'start', 'fail', 'log', 'exitStatus'],
+      },
+    },
+    type: 'boolean',
+  },
 ];
