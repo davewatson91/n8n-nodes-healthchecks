@@ -67,4 +67,20 @@ export const commonFields: INodeProperties[] = [
     },
     type: 'string',
   },
+  {
+    displayName: 'Request Body',
+    name: 'requestBody',
+    default: '',
+    hint: 'Optional payload to include in the ping request body',
+    displayOptions: {
+      show: {
+        resource: ['by_uuid', 'by_slug'],
+        operation: ['ping', 'start', 'fail', 'log', 'exitStatus'],
+      },
+    },
+    type: 'string',
+    typeOptions: {
+      rows: 4,
+    },
+  },
 ];

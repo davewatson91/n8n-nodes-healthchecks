@@ -1,4 +1,4 @@
-import { INodePropertyOptions } from "n8n-workflow";
+import { IHttpRequestOptions, INodePropertyOptions } from "n8n-workflow";
 
 export const failOperation: INodePropertyOptions = {
   name: 'Fail',
@@ -7,12 +7,23 @@ export const failOperation: INodePropertyOptions = {
   description: 'Signals to Healthchecks.io that the job has failed',
   routing: {
     request: {
-      url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/fail',
-      method: 'GET',
+      url: '=/ping/{{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/fail',
+      method: 'POST',
       qs: {
-        'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
-        'rid': '={{$parameter.runId}}',
+        'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
+        'rid': '={{$parameter.runId || undefined}}',
       },
+      body: '={{$parameter.requestBody || undefined}}',
+    },
+    send: {
+      preSend: [
+        async function (requestOptions: IHttpRequestOptions) {
+          if (requestOptions.body !== undefined) {
+            requestOptions.json = false;
+          }
+          return requestOptions;
+        },
+      ],
     },
   },
 };
