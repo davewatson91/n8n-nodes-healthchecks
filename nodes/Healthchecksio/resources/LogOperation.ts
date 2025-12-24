@@ -1,4 +1,5 @@
-import { INodeProperties, INodePropertyOptions } from "n8n-workflow";
+import { IExecuteSingleFunctions } from "n8n-core";
+import { IHttpRequestOptions, INodePropertyOptions } from "n8n-workflow";
 
 export const logOperation: INodePropertyOptions = {
   name: 'Log',
@@ -7,31 +8,36 @@ export const logOperation: INodePropertyOptions = {
   description: 'Sends logging information to Healthchecks.io without signaling success or failure',
   routing: {
     request: {
-      url: '={{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/log',
+      url: '=/ping/{{$parameter.uuid ?? ($parameter.pingKey + "/" + $parameter.slug)}}/log',
       method: 'POST',
       qs: {
-        'create': '={{$parameter.createIfNotExists ? 1 : 0}}',
-        'rid': '={{$parameter.runId}}',
+        'create': '={{$parameter.resource === "by_slug" && $parameter.createIfNotExists ? 1 : undefined}}',
+        'rid': '={{$parameter.runId || undefined}}',
       },
-      body: {
-        'msg': '={{$parameter.logMessage}}',
-      },
+      body: '={{$parameter.requestBody || undefined}}',
+    },
+    send: {
+      preSend: [
+        async function (this: IExecuteSingleFunctions, requestOptions: IHttpRequestOptions) {
+          if (requestOptions.body !== undefined) {
+            requestOptions.json = false;
+          }
+          const itemIndex = (requestOptions as { context?: { itemIndex?: number } }).context?.itemIndex ?? 0;
+          const debugRequest = this.getNodeParameter('debugRequest', itemIndex) as boolean;
+
+          if (debugRequest) {
+            this.logger.info('Healthchecks.io outgoing request', {
+              method: requestOptions.method,
+              baseURL: requestOptions.baseURL,
+              url: requestOptions.url,
+              qs: requestOptions.qs,
+              headers: requestOptions.headers,
+              body: requestOptions.body,
+            });
+          }
+          return requestOptions;
+        },
+      ],
     },
   },
 };
-
-export const logFields: INodeProperties[] = [
-  {
-    displayName: 'Log Message',
-    name: 'logMessage',
-    default: '',
-    displayOptions: {
-      show: {
-        resource: ['by_uuid', 'by_slug'],
-        operation: ['log'],
-      },
-    },
-    type: 'string',
-    required: true,
-  },
-];

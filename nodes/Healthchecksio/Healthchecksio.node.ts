@@ -2,7 +2,7 @@ import { INodeType, INodeTypeDescription } from 'n8n-workflow';
 import { commonFields } from './CommonFields';
 import { exitStatusFields, exitStatusOperation } from './resources/ExitStatusOperation';
 import { failOperation } from './resources/FailOperation';
-import { logFields, logOperation } from './resources/LogOperation';
+import { logOperation } from './resources/LogOperation';
 import { startOperation } from './resources/StartOperation';
 import { successPingOperation } from './resources/SuccessPingOperation';
 
@@ -26,14 +26,14 @@ export class Healthchecksio implements INodeType {
 				required: true,
 			},
 		],
-		requestDefaults: {
-			baseURL: '={{$credentials?.domain}}',
-			url: '',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-		},
+                requestDefaults: {
+                        baseURL: '={{$credentials?.domain}}',
+                        url: '',
+                        headers: {
+                                Accept: 'application/json',
+                        },
+                        json: false,
+                },
 		properties: [
 			{
 				displayName: 'Resource',
@@ -76,8 +76,7 @@ export class Healthchecksio implements INodeType {
 			},
 
 			...commonFields,
-			...logFields,
-			...exitStatusFields,
+                        ...exitStatusFields,
 
 		],
 	};
